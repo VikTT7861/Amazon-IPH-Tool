@@ -1,103 +1,107 @@
-# Amazon-IPH-Tool
-This is a tool created to manage the handle time of the different tasks received at my Amazon's Department Job (KYC). It does not contain anything crucial, critical or very confidential, hence, I can share it publicly.
+# 🐝 IPH Real Time Tracker
 
-## Semantic Versioning
-In semantic versioning (MAJOR.MINOR.PATCH), the numbers represent:
+### Amazon KYC - VRMO SJO
 
-- **MAJOR** (first number): Breaking changes
+_A Real-Time, Browser-Based Productivity Tracker for Amazon KYC Specialists._
 
-- **MINOR** (second number): New features, backward compatible
+_Tracks handle times, calculates live IPH, and provides intelligent suggestions - all with zero server dependencies._
 
-- **PATCH** (third number): Bug fixes, backward compatible
+## 📋 Table of Contents
 
+- \[Overview\](#overview)
+- \[Features at a Glance\](#features-at-a-glance)
+- \[File Structure\](#file-structure)
+- \[How to Run\](#how-to-run)
+- \[Browser Compatibility\](#browser-compatibility)
+- \[Data Persistence\](#data-persistence)
+- \[Backup & Restore\](#backup--restore)
+- \[Obfuscation\](#obfuscation)
+- \[Author & Permissions\](#author--permissions)
 
-Version examples:
+## Overview
 
-- `0.0.1` - Very early version with bug fixes
+The **IPH Real Time Tracker** is a fully client-side web application for Amazon KYC agents at VRMO SJO. It enables specialists to measure and record task handle times in real time, calculate live IPH against context-specific blended targets, and receive smart sub-task prioritization suggestions - all without a server, login, or internet connection after the initial load.
 
-- `0.1.1` - Version with new features plus bug fixes
+## Features at a Glance
 
-- `1.0.0` - Complete, stable release
+| **Category**            | **Features**                                                                                                                                                                 |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| \*\*Timers\*\*          | Acct Sum, CTC, Inv-Crt, Int-Esc - independent, with Case ID inputs                                                                                                           |
+| \*\*Sub-Task Timers\*\* | IDV, TIV, BIV, BOV, LOA, LRV, ADV, FO, BAV - each with its \*\*own independent timer\*\* shown inside the button (requires Acct Sum running; persists across page refreshes) |
+| \*\*Color System\*\*    | Green → Yellow → Red → Black based on each timer's own elapsed time vs IPH threshold                                                                                         |
+| \*\*Modes\*\*           | Seller Wallet and SnowBall toggles with dedicated thresholds                                                                                                                 |
+| \*\*Queue & Skills\*\*  | BR / CA / CN + OOC CN / OOC EN / SU + T1 / T2 / ESC                                                                                                                          |
+| \*\*IPH Engine\*\*      | Live bar, variance%, Your IPH vs Blended Target                                                                                                                              |
+| \*\*Suggestions\*\*     | Smart rotating tips for sub-task priority, pace, and context                                                                                                                 |
+| \*\*Guided Tour\*\*     | 14-step interactive guide with spotlight and demo animations                                                                                                                 |
+| \*\*Registry\*\*        | Grouped block history with tier badges, flags, edit, delete                                                                                                                  |
+| \*\*Export\*\*          | Excel (two sheets) and JSON backup                                                                                                                                           |
+| \*\*Theme\*\*           | Dark / Light mode, persisted across sessions                                                                                                                                 |
 
-- `1.1.0` - New features added
+## File Structure
 
-- `1.1.1` - Fixed bugs in the 1.1.0 version
+IPH/  
+├── index.html → Main application (minified HTML)  
+├── javascript.js → Full readable source code  
+├── javascript_obfuscated.js → Production-ready obfuscated version  
+├── styles.css → Minified stylesheet  
+├── README.md → Project overview (this file)  
+├── TECHNICAL_MANUAL.md → Architecture & developer reference  
+└── USER_MANUAL.md → End-user guide
 
+_\*\*For production:\*\* change \`&lt;script src="javascript.js"&gt;\` to \`&lt;script src="javascript_obfuscated.js"&gt;\` in \`index.html\`._
 
-> Note: "-beta" suffix indicates a testing version
+_\*\*For development:\*\* always work on \`javascript.js\`, then regenerate the obfuscated file._
 
-## Current Versions
+## How to Run
 
-- Version 1.2.2
+- Place all files in the same folder
+- Open index.html in any modern browser
+- No installation, no server, no internet connection required
 
+Flag images load from flagcdn.com - the only external dependency, used for visual flags only.
 
-### Features
+## Browser Compatibility
 
-1. ⏱️ Real-time Start/Stop Timer
+| **Browser**       | **Status**       |
+| ----------------- | ---------------- |
+| Chrome 90+        | ✅ Full support  |
+| Edge 90+          | ✅ Full support  |
+| Firefox 88+       | ✅ Full support  |
+| Brave             | ✅ Full support  |
+| Safari 15+        | ✅ Full support  |
+| Internet Explorer | ❌ Not supported |
 
-2. 💾 Local data storage
+Requires: localStorage, IndexedDB, TextDecoder, requestAnimationFrame, Uint8Array.
 
-3. 📊 Excel export with readable format
+## Data Persistence
 
-4. 📄 Consistent styling between tool and exports
+| **Layer**          | **Holds**                     | **Survives**                |
+| ------------------ | ----------------------------- | --------------------------- |
+| \`localStorage\`   | All entries, blocks, settings | Refresh and tab close       |
+| \`IndexedDB\`      | Mirror of critical keys       | Basic "Clear cookies"       |
+| JSON file (manual) | Full snapshot                 | Everything - stored on disk |
 
-5. 🗑️ Data deletion via "Reset All Data" or "Trash Icon"
+_⚠️ Choosing \*\*"Clear all site data"\*\* in the browser erases both localStorage and IndexedDB. Use the JSON Backup button regularly._
 
-6. 🔒 Data persistence through:
+## Backup & Restore
 
-   - Page refreshes
+**Backup:** click **💾 Backup** next to "Tasks Timer Registry" → downloads a .json file: IPH Results, Week #, Day, Month, Date, Year.json
 
-   - Window closures
+**Restore:** click **📂 Restore** → select your .json → page reloads with full data recovered.
 
-   - PC restarts/shutdowns
+## Obfuscation
 
-7. 🪟 Optional popup window interface
+javascript_obfuscated.js is generated from javascript.js via:
 
-8. ⏰ 40-minute manager contact notification
+- Comment stripping + whitespace minification
+- UTF-8 → Base64 encoding (8,000-char chunks)
+- Self-decoding wrapper: atob() + TextDecoder('utf-8') + (0,eval)
 
-9. 🎨 Time difficulty indicators:
+It is functionally identical to the source and runs in all supported browsers.
 
-   - 🟢 Green: Good
+## Author & Permissions
 
-   - 🟡 Yellow: Medium
+© 2026 - vssalama@ · Amazon KYC · VRMO SJO
 
-   - 🔴 Red: Hard
-
-   - ⚫ Black: Critical
-
-10. 📋 Account Summary features:
-
-    - Bordered color coding
-
-    - Independent timer for total duration
-
-11. ✅ Queue & Sub-Task selection via checkboxes
-
-12. 🔒 Queue validation based on functionality
-
-13. ⚠️ START button requires Sub-Task selection
-
-14. 📝 Account Summary first selection requirement
-
-15. 🔄 CTC functionality without Sub-Task selection
-
-16. ⚠️ Account Summary selection warnings
-
-17. 🌐 Currently Firefox-exclusive
-
-
-**Note:** Personal usage only. No CDN connections to Amazon database.
-
-
-### Testing/Pending Features
-
-
-1. Queue & Sub-Task minute goals per IPH Workshop
-
-2. Goal-based alerts and notifications
-
-3. Implementation of user feedback
-
-4. Additional validations
-
-5. Security features and code refactoring (staging)
+Contact **vssalama@** for feedback, bug reports, or permissions to use or adapt this code.
